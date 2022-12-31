@@ -1,6 +1,6 @@
 {
   "name": "simplest-server",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "一个快速开发的基于http模块的，路由式无服务器",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,9 @@
   "author": "Fgaoxing",
   "license": "LGPL",
   "dependencies": {
+    "ejs": "^3.1.8",
     "formidable": "^2.0.1",
-    "ua-parser-js": "^1.0.32"
+    "ua-parser-js": "^1.0.32",
+    "ws": "^8.11.0"
   }
 }
