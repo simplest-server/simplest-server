@@ -16,7 +16,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - name: edit version
-        run: sed -i 's/{{package_version}}/${{ steps.get_version.outputs.VERSION }}' ./package.json
+        run: sed -i 's/{{package_version}}/${{ steps.get_version.outputs.VERSION }}/' ./package.json
       
       - run: npm publish
         env:
