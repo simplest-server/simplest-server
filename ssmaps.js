@@ -3,22 +3,21 @@ const fs = require('fs');
 const npath = require('path');
 const error = require('./sserr');
 const mime = require('mime');
-module.exports = function (req, res, path, data = {}) {
-    if (typeof data !== 'object' && typeof path !== 'string') {
-        console.log('data must be a object,path must be a string')
-        return 'data must be a object,path must be a string'
+module.exports = function (req, res, obj, data = {}) {
+    if (typeof data !== 'object' && typeof obj !== 'object') {
+        console.log('data must be a object,path must be a object')
+        return 'data must be a object,path must be a object'
     }
+    path = (obj.path[-1] === '/') ? obj.path.slice(0, -1) : obj.path
+    obj.prefix = (obj.prefix[-1] === '/') ? obj.prefix.slice(0, -1) : obj.prefix
+    obj.prefix = (obj.prefix[0] === '/') ? obj.prefix : '/' + obj.prefix
     if (!fs.existsSync(path)) {
         error[500](req, res, `Couldn't find path:${path}`)
     } else {
         if (path[path.length - 1] === '/') {
             path = path.slice(0, -1)
         }
-        if (path.split('/')[path.split('/').length - 1] !== '.ss_root') {
-            var FilePath = path.split('/').slice(0, path.split('/').length - 1).join('/') + '/' + req.url.pathname.split('/').slice((req.url.pathname.split('/').indexOf(path.split('/')[path.split('/').length - 1]) !== -1) ? req.url.pathname.split('/').indexOf(path.split('/')[path.split('/').length - 1]) : req.url.pathname.length - 1, req.url.pathname.length - 1).join('/')
-        } else {
-            var FilePath = path + req.url.pathname
-        }
+        var FilePath = path + req.url.pathname.slice(obj.prefix.length, req.url.pathname.length)
         if (fs.existsSync(FilePath)) {
             if (fs.statSync(FilePath).isFile()) {
                 FileExt = npath.extname(FilePath).slice(1)
