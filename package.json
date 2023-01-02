@@ -9,6 +9,7 @@
   "dependencies": {
     "ejs": "latest",
     "formidable": "latest",
+    "mime": "^3.0.0",
     "ua-parser-js": "latest"
   }
 }

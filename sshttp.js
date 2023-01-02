@@ -2,6 +2,7 @@ const http = require("http");
 const url = require("url");
 const UAParser = require("ua-parser-js");
 const formidable = require("formidable");
+const error = require("./sserr")
 module.exports = function (n){
     n = n || {};
     if (typeof n !== 'object') {
@@ -38,7 +39,7 @@ module.exports = function (n){
                 var vars = req.url.query.split("&");
                 for (var i = 0; i < vars.length; i++) {
                     var pair = vars[i].split("=");
-                    if (pair[0] == variable) {
+                    if (pair[0] === variable) {
                         return decodeURIComponent(pair[1]);
                     }
                 }
@@ -51,8 +52,8 @@ module.exports = function (n){
         req.UA=uaParser.getResult()
         req.cookie = {}
         res.path = n
-        if (req.headers.cookie && req.headers.cookie.indexOf('=') != -1) {
-            if (req.headers.cookie.indexOf('; ') != -1) {
+        if (req.headers.cookie && req.headers.cookie.indexOf('=') !== -1) {
+            if (req.headers.cookie.indexOf('; ') !== -1) {
                 var x = req.headers.cookie.split("; ");
             } else {
                 var x = [req.headers.cookie];
@@ -65,7 +66,7 @@ module.exports = function (n){
         if (!req.headers['Content-Type']) {
             req.headers['Content-Type'] = 'application/json'
         }
-        if (req.method == 'OPTIONS') {
+        if (req.method === 'OPTIONS') {
             if (n['OPTIONS'] && typeof n['OPTIONS'] == 'function') {
                 n['OPTIONS'](req, res)
                 return false;
@@ -96,18 +97,7 @@ module.exports = function (n){
                         try {
                             n[key](req, res)
                         } catch (e) {
-                            res.writeHead(500, {'Content-Type': 'text/html;charset=utf-8'});
-                            res.end(`<title>500 Server Error</title><style>h1,p {text-align:center;}</style><h1>500 Server Error</h1><hr><p>Simplest Server</p>
-                            <br><strong>sorry,server is broken.</strong><br><div>
-                            time: ${Date()}
-                            <br>
-                            ip: ${req.ip}
-                            <br>
-                            path: ${req.url.pathname}
-                            <br>
-                            msg: ${e}
-                            </div>`);
-                            console.log(`__________________________\ntimes: ${Date()}\nip: ${req.ip}\npath: ${req.url.pathname}\nmsg: ${e}\n__________________________`);
+                            error[500](req, res, e)
                         }
                     }
                 } else {
@@ -116,18 +106,7 @@ module.exports = function (n){
                         try {
                             n[key](req, res)
                         } catch (e) {
-                            res.writeHead(500, {'Content-Type': 'text/html;charset=utf-8'});
-                            res.end(`<title>500 Server Error</title><style>h1,p {text-align:center;}</style><h1>500 Server Error</h1><hr><p>Simplest Server</p>
-                            <br><strong>sorry,server is broken.</strong><br><div>
-                            time: ${Date()}
-                            <br>
-                            ip: ${req.ip}
-                            <br>
-                            path: ${req.url.pathname}
-                            <br>
-                            msg: ${e}
-                            </div>`);
-                            console.log(`__________________________\ntimes: ${Date()}\nip: ${req.ip}\npath: ${req.url.pathname}\nmsg: ${e}\n__________________________`);
+                            error[500](req, res, e)
                         }
                     }
                 }
@@ -136,8 +115,7 @@ module.exports = function (n){
                 if ('404' in n && typeof n['404'] === 'function') {
                     n['404'](req, res);
                 } else {
-                    res.writeHead(404, {'Content-Type': 'text/html;charset=utf-8'});
-                    res.end('<title>404 Not Found</title><style>h1,p {text-align:center;}</style><h1>404 Not Found</h1><hr><p>Simplest Server</p>');
+                    error[404](req, res)
                 }
             }
         })
