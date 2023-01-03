@@ -36,8 +36,15 @@ module.exports = function (req, res, path, data = {}) {
                 for (let i = 0; i < FileLS.length; i++) {
                     if (FileLS[i].indexOf('index') !== -1) {
                         FileExt = npath.extname(FilePath + '/' + FileLS[i]).slice(1)
-                        res.writeHead(200, {'Content-Type': mime.getType(FileExt) + ';charset=utf-8'})
-                        res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        if (FileExt === '') {
+                            res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'})
+                            res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        } else if (FileExt === 'ejs') {
+                            ejs(req, res, 200, FilePath + '/' + FileLS[i], data)
+                        } else {
+                            res.writeHead(200, {'Content-Type': mime.getType(FileExt) + ';charset=utf-8'})
+                            res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        }
                     }
                 }
             }

@@ -18,7 +18,7 @@ module.exports = function (req, res, obj, data = {}) {
             path = path.slice(0, -1)
         }
         var FilePath = path + '/' + req.url.pathname.slice(obj.prefix.length, req.url.pathname.length)
-        console.log(FilePath)
+        //console.log(FilePath)
         if (fs.existsSync(FilePath)) {
             if (fs.statSync(FilePath).isFile()) {
                 FileExt = npath.extname(FilePath).slice(1)
