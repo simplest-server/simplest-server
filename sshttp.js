@@ -85,10 +85,10 @@ module.exports = function (n){
         }
         res.err={}
         if (n[404]&& typeof n[404] == 'function'){
-            res.err[404]=n[404]
+            res.err[404]=n['404']
         }
         if (n[500]&& typeof n[500] == 'function'){
-            res.err[500]=n[500]
+            res.err[500]=n['500']
         }
         const form = formidable({multiples: true});
         form.parse(req, function (err, fields, files) {
