@@ -94,7 +94,7 @@ module.exports = function (n){
         form.parse(req, function (err, fields, files) {
             req.body = {error: err, fields: fields, files: files};
             Object.keys(n).forEach(function (key) {
-                if (typeof n[key] !== 'function') {
+                if (typeof n[key] !== 'function'||a>0) {
                     return;
                 }
                 if (key.indexOf(':') < 0) {
