@@ -17,7 +17,8 @@ module.exports = function (req, res, obj, data = {}) {
         if (path[path.length - 1] === '/') {
             path = path.slice(0, -1)
         }
-        var FilePath = path + req.url.pathname.slice(obj.prefix.length, req.url.pathname.length)
+        var FilePath = path + '/' + req.url.pathname.slice(obj.prefix.length, req.url.pathname.length)
+        console.log(FilePath)
         if (fs.existsSync(FilePath)) {
             if (fs.statSync(FilePath).isFile()) {
                 FileExt = npath.extname(FilePath).slice(1)
@@ -35,8 +36,15 @@ module.exports = function (req, res, obj, data = {}) {
                 for (let i = 0; i < FileLS.length; i++) {
                     if (FileLS[i].indexOf('index') !== -1) {
                         FileExt = npath.extname(FilePath + '/' + FileLS[i]).slice(1)
-                        res.writeHead(200, {'Content-Type': mime.getType(FileExt) + ';charset=utf-8'})
-                        res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        if (FileExt === '') {
+                            res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'})
+                            res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        } else if (FileExt === 'ejs') {
+                            ejs(req, res, 200, FilePath + '/' + FileLS[i], data)
+                        } else {
+                            res.writeHead(200, {'Content-Type': mime.getType(FileExt) + ';charset=utf-8'})
+                            res.end(fs.readFileSync(FilePath + '/' + FileLS[i]))
+                        }
                     }
                 }
             }
