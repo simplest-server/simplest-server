@@ -3,7 +3,7 @@ const url = require("url");
 const UAParser = require("ua-parser-js");
 const formidable = require("formidable");
 const error = require("./sserr")
-module.exports = function (n){
+module.exports = function (n) {
     n = n || {};
     if (typeof n !== 'object') {
         throw new TypeError('path must be an object,not a ' + typeof n);
@@ -46,10 +46,10 @@ module.exports = function (n){
             }
             return (err);
         }
-        req.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
+        req.ip = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
         req.host = req.headers.host || '0.0.0.0'
         var uaParser = new UAParser(req.headers['user-agent']);
-        req.UA=uaParser.getResult()
+        req.UA = uaParser.getResult()
         req.cookie = {}
         res.path = n
         if (req.headers.cookie && req.headers.cookie.indexOf('=') !== -1) {
@@ -80,21 +80,21 @@ module.exports = function (n){
                 return false;
             }
         }
-        if (n['AllRun']&& typeof n['AllRun'] == 'function'){
+        if (n['AllRun'] && typeof n['AllRun'] == 'function') {
             n['AllRun'](req, res)
         }
-        res.err={}
-        if (n['404']&& typeof n['404'] == 'function'){
-            res.err[404]=n['404']
+        res.err = {}
+        if (n['404'] && typeof n['404'] == 'function') {
+            res.err[404] = n['404']
         }
-        if (n['500']&& typeof n['500'] == 'function'){
-            res.err[500]=n['500']
+        if (n['500'] && typeof n['500'] == 'function') {
+            res.err[500] = n['500']
         }
         const form = formidable({multiples: true});
         form.parse(req, function (err, fields, files) {
             req.body = {error: err, fields: fields, files: files};
             Object.keys(n).forEach(function (key) {
-                if (typeof n[key] !== 'function'||a>0) {
+                if (typeof n[key] !== 'function' || a > 0) {
                     return;
                 }
                 if (key.indexOf(':') < 0) {
