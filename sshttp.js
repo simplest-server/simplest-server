@@ -1,9 +1,10 @@
-const http = require("http");
-const url = require("url");
-const UAParser = require("ua-parser-js");
-const formidable = require("formidable");
-const error = require("./sserr")
-module.exports = function (n){
+import http from "http";
+import { URL } from "url";
+import UAParser from "ua-parser-js";
+import formidable from "formidable";
+import error from "./sserr.js"
+
+export default function (n){
     n = n || {};
     if (typeof n !== 'object') {
         throw new TypeError('path must be an object,not a ' + typeof n);
@@ -33,7 +34,9 @@ module.exports = function (n){
         res.clearCookie = function (id, path = '/') {
             this.setHeader('set-cookie', id + '=; maxAge=0; path=' + path);
         }
-        req.url = url.parse(req.url)
+        console.log(req.url);
+        req.url = new URL(req.url, "http://0.0.0.0")
+        req.url.query, req.url.path = req.url.search.slice(1), req.url.pathname + req.url.search
         res.getQueryVariable = function (variable, err) {
             if (req.url.query) {
                 var vars = req.url.query.split("&");
