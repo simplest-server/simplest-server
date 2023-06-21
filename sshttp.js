@@ -34,7 +34,7 @@ export default function (n){
         res.clearCookie = function (id, path = '/') {
             this.setHeader('set-cookie', id + '=; maxAge=0; path=' + path);
         }
-        console.log(req.url);
+        //console.log(req.url);
         req.url = new URL(req.url, "http://0.0.0.0")
         req.url.query, req.url.path = req.url.search.slice(1), req.url.pathname + req.url.search
         res.getQueryVariable = function (variable, err) {
