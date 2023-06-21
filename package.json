@@ -6,6 +6,7 @@
   "keywords": [],
   "author": "Fgaoxing",
   "license": "LGPL",
+  "type": "module",
   "dependencies": {
     "ejs": "latest",
     "formidable": "latest",
