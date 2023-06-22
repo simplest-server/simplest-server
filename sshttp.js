@@ -35,9 +35,24 @@ export default function (n){
             this.setHeader('set-cookie', id + '=; maxAge=0; path=' + path);
         }
         //console.log(req.url);
-        req.url = new URL(req.url, "http://0.0.0.0")
-        req.url.query, req.url.path = req.url.search.slice(1), req.url.pathname + req.url.search
-        res.getQueryVariable = function (variable, err) {
+        let url = new URL(req.url, "http://"+ (req.headers.host || "0.0.0.0"))
+        req.url = {
+            href: url.href,
+            origin: url.origin,
+            protocol: url.protocol,
+            username: url.username,
+            password: url.password,
+            host: url.host,
+            hostname: url.hostname,
+            port: url.port,
+            pathname: url.pathname,
+            search: url.search,
+            searchParams: url.searchParams,
+            hash: url.hash,
+            query: url.search.slice(1),
+            path: url.pathname + url.search
+        }
+        req.getQueryVariable = function (variable, err) {
             if (req.url.query) {
                 var vars = req.url.query.split("&");
                 for (var i = 0; i < vars.length; i++) {
@@ -49,6 +64,7 @@ export default function (n){
             }
             return (err);
         }
+        res.getQueryVariable = req.getQueryVariable
         req.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress || '';
         req.host = req.headers.host || '0.0.0.0'
         var uaParser = new UAParser(req.headers['user-agent']);
