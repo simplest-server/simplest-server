@@ -10,7 +10,7 @@ export default function (n){
         throw new TypeError('path must be an object,not a ' + typeof n);
     }
     return http.createServer(function (req, res) {
-        res.cookie = function (id, value, json = {path: '/', maxAge: null, expires: null, domain: null}) {
+        req.cookie = function (id, value, json = {path: '/', maxAge: null, expires: null, domain: null}) {
             if (json.maxAge) {
                 json.maxAge = '; max-age=' + json.maxAge;
             } else {
@@ -31,7 +31,7 @@ export default function (n){
             }
             this.setHeader('set-cookie', id + '=' + value + '; path=' + json.path + json.maxAge + json.expires + json.domain);
         }
-        res.clearCookie = function (id, path = '/') {
+        req.clearCookie = function (id, path = '/') {
             this.setHeader('set-cookie', id + '=; maxAge=0; path=' + path);
         }
         //console.log(req.url);
@@ -70,7 +70,7 @@ export default function (n){
         var uaParser = new UAParser(req.headers['user-agent']);
         req.UA=uaParser.getResult()
         req.cookie = {}
-        res.path = n
+        req.path = n
         if (req.headers.cookie && req.headers.cookie.indexOf('=') !== -1) {
             if (req.headers.cookie.indexOf('; ') !== -1) {
                 var x = req.headers.cookie.split("; ");
