@@ -10,7 +10,7 @@ export default {
                 console.log(e);
             }
         }
-        console.log(ejs.render, `__________________________\ntimes: ${Date()}\nip: ${req.ip}\npath: ${req.url.pathname}\nmsg: ${err}\n__________________________`);
+        console.log(`__________________________\ntimes: ${Date()}\nip: ${req.ip}\npath: ${req.url.pathname}\nmsg: ${err}\n__________________________`);
         res.writeHead(500, {'Content-Type': 'text/html;charset=utf-8'});
         res.end(`<title>500 Server Error</title><style>h1, p {text-align: center;}</style><h1>500 Server Error</h1><hr><p>${name}</p><br><strong>sorry,server is broken.</strong><br><div>time: ${Date()}<br>ip: ${req.ip}<br>path: ${req.url.pathname}<br>msg: ${err}</div>`);
     }, 404: function (req, res, name = "Simplest-Server") {

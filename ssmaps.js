@@ -22,7 +22,7 @@ export default function (req, res, obj, data = {}) {
         //console.log(FilePath)
         if (fs.existsSync(FilePath)) {
             if (fs.statSync(FilePath).isFile()) {
-                FileExt = npath.extname(FilePath).slice(1);
+                var FileExt = npath.extname(FilePath).slice(1);
                 if (FileExt === '') {
                     res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
                     res.end(fs.readFileSync(FilePath));
@@ -36,7 +36,7 @@ export default function (req, res, obj, data = {}) {
                 let FileLS = fs.readdirSync(FilePath);
                 for (let i = 0; i < FileLS.length; i++) {
                     if (FileLS[i].indexOf('index') !== -1) {
-                        FileExt = npath.extname(FilePath + '/' + FileLS[i]).slice(1);
+                        var FileExt = npath.extname(FilePath + '/' + FileLS[i]).slice(1);
                         if (FileExt === '') {
                             res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
                             res.end(fs.readFileSync(FilePath + '/' + FileLS[i]));
